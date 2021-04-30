@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import Entity from "./Entity";
 import User from "./User";
+import { Sub } from "./Sub";
 
 @TypeormEntity("posts")
 export class Post extends Entity {
@@ -37,6 +38,10 @@ export class Post extends Entity {
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: "username", referencedColumnName: "username" })
   user: User;
+
+  @ManyToOne(() => Sub, (sub) => sub.posts)
+  @JoinColumn({ name: "subName", referencedColumnName: "name" })
+  sub: Sub;
 
   @BeforeInsert()
   makeIdAndSlug() {
