@@ -30,10 +30,12 @@ const register = async (req: Request, res: Response) => {
     await user.save();
 
     //  Return the user
-    return res.json(user);
+    return res
+      .status(200)
+      .json({ success: true, message: "User has been created", user });
   } catch (err) {
     console.log(err);
-    return res.status(500).json(err);
+    return res.status(500).json({ success: false, err });
   }
 };
 
@@ -69,7 +71,11 @@ const login = async (req: Request, res: Response) => {
     );
     return res
       .status(200)
-      .json({ message: "User has logged in successfully!", user });
+      .json({
+        success: true,
+        message: "User has logged in successfully!",
+        user,
+      });
   } catch (error) {
     console.log(error);
     return;

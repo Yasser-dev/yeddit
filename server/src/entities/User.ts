@@ -1,8 +1,15 @@
 import { IsEmail, Length } from "class-validator";
-import { Entity as TypeormEntity, Column, Index, BeforeInsert } from "typeorm";
+import {
+  Entity as TypeormEntity,
+  Column,
+  Index,
+  BeforeInsert,
+  OneToMany,
+} from "typeorm";
 import bcrypt from "bcrypt";
 import { Exclude } from "class-transformer";
 import Entity from "./Entity";
+import { Post } from "./Post";
 
 @TypeormEntity("users")
 export default class User extends Entity {
@@ -27,6 +34,9 @@ export default class User extends Entity {
     message: "Password cannot be less than 8 characters long",
   })
   password: string;
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 
   @BeforeInsert()
   async hashPassword() {
