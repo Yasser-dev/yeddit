@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import { User } from "../entities/User";
+import User from "../entities/User";
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.cookies.token;
