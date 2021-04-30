@@ -3,9 +3,10 @@ import { createConnection } from "typeorm";
 import express from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
-import authRoutes from "./routes/auth";
 import trim from "./middlewares/trim";
 import cookieParser from "cookie-parser";
+import authRoutes from "./routes/auth";
+import postsRoutes from "./routes/posts";
 
 const app = express();
 dotenv.config();
@@ -13,8 +14,9 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(trim);
 app.use(cookieParser());
-app.get("/", (_, res) => res.send("Hello World"));
+
 app.use("/api/auth", authRoutes);
+app.use("/api/posts", postsRoutes);
 
 const port = process.env.PORT || 5000;
 
