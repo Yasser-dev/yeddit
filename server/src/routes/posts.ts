@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import Post from "../entities/Post";
 import Sub from "../entities/Sub";
+import Comment from "../entities/Comment";
 import auth from "../middlewares/authMiddleware";
 
 const createPost = async (req: Request, res: Response) => {
@@ -65,10 +66,44 @@ const getPost = async (req: Request, res: Response) => {
   }
 };
 
+const createComment = async (req: Request, res: Response) => {
+  const { identifier, slug } = req.params;
+  const body: string = req.body.body;
+  const user = res.locals.user;
+
+  try {
+    const post = await Post.findOne(
+      { identifier, slug },
+      {
+        relations: ["sub"],
+      }
+    );
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+        error: "No post was found with the requested identifier",
+      });
+    }
+
+    const comment = new Comment({ body, user, post });
+    await comment.save();
+
+    return res.status(200).json({ success: true, comment });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ success: false, error: "Something went wrong" });
+  }
+};
+
 const router = Router();
 
 router.post("/", auth, createPost);
 router.get("/", getPosts);
 router.get("/:identifier/:slug", getPost);
+router.post("/:identifier/:slug/comments", auth, createComment);
 
 export default router;
