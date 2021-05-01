@@ -1,4 +1,3 @@
-import { makeId, slugify } from "../util/helpers";
 import {
   BeforeInsert,
   Column,
@@ -6,13 +5,17 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from "typeorm";
+
 import Entity from "./Entity";
 import User from "./User";
-import { Sub } from "./Sub";
+import Sub from "./Sub";
+import Comment from "./Comment";
+import { makeId, slugify } from "../util/helpers";
 
 @TypeormEntity("posts")
-export class Post extends Entity {
+export default class Post extends Entity {
   constructor(post: Partial<Post>) {
     super();
     Object.assign(this, post);
@@ -42,6 +45,9 @@ export class Post extends Entity {
   @ManyToOne(() => Sub, (sub) => sub.posts)
   @JoinColumn({ name: "subName", referencedColumnName: "name" })
   sub: Sub;
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment[];
 
   @BeforeInsert()
   makeIdAndSlug() {

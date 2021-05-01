@@ -1,7 +1,8 @@
-import { isEmpty } from "class-validator";
 import { Request, Response, Router } from "express";
+import { isEmpty } from "class-validator";
 import { getRepository } from "typeorm";
-import { Sub } from "../entities/Sub";
+
+import Sub from "../entities/Sub";
 import User from "../entities/User";
 import auth from "../middlewares/authMiddleware";
 
