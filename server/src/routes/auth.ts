@@ -69,16 +69,14 @@ const login = async (req: Request, res: Response) => {
         path: "/",
       })
     );
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "User has logged in successfully!",
-        user,
-      });
+    return res.status(200).json({
+      success: true,
+      message: "User has logged in successfully!",
+      user,
+    });
   } catch (error) {
     console.log(error);
-    return;
+    return res.status(500).json({ error: "Something went wrong." });
   }
 };
 
